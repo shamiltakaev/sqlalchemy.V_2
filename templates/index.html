@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title">Works Log</h1>
+    {% for job, user in data %}
+        <h2>Action #{{ job.id }}</h2>
+        <table class="table">
+            <tr class="table-secondary">
+                <th scope="col">Title of activity</th>
+                <th scope="col">Team Leader</th>
+                <th scope="col">Duration</th>
+                <th scope="col">List of collaborators</th>
+                <th scope="col">Is Finished</th>
+            </tr>
+            <tr>
+                <th class="table-info" style="text-align:center;">{{ job.job }}</th>
+                <th class="table-info">{{ user.name }} {{ user.surname }}</th>
+                <th class="table-info">{{ (job.end_date - job.start_date).seconds // 3600 }} hours</th>
+                <th class="table-info">{{ job.collaborators }}</th>
+                <th class="table-danger">{{ job.is_finished }}</th>
+            </tr>
+            
+        </table>
+    {% endfor %}
+{% endblock %}
