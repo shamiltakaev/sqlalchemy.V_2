@@ -2,9 +2,9 @@ import datetime
 from sqlalchemy import orm, Column, String, DateTime, Integer
 from werkzeug.security import generate_password_hash, check_password_hash
 from .db_session import SqlAlchemyBase
+from flask_login import UserMixin
 
-
-class User(SqlAlchemyBase):
+class User(SqlAlchemyBase, UserMixin):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -17,6 +17,8 @@ class User(SqlAlchemyBase):
     email = Column(String, index=True, unique=True, nullable=True)
     modified_date = Column(DateTime, default=datetime.datetime.now)
     hashed_password = Column(String, nullable=True)
+    jobs = orm.relationship("Jobs", back_populates='user')
+
 
 
     def set_password(self, password):

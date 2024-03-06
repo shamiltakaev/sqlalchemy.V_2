@@ -1,25 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="title">Works Log</h1>
-    {% for job, user in data %}
-        <h2>Action #{{ job.id }}</h2>
-        <table class="table">
-            <tr class="table-secondary">
-                <th scope="col">Title of activity</th>
-                <th scope="col">Team Leader</th>
-                <th scope="col">Duration</th>
-                <th scope="col">List of collaborators</th>
-                <th scope="col">Is Finished</th>
-            </tr>
-            <tr>
-                <th class="table-info" style="text-align:center;">{{ job.job }}</th>
-                <th class="table-info">{{ user.name }} {{ user.surname }}</th>
-                <th class="table-info">{{ (job.end_date - job.start_date).seconds // 3600 }} hours</th>
-                <th class="table-info">{{ job.collaborators }}</th>
-                <th class="table-danger">{{ job.is_finished }}</th>
-            </tr>
-            
-        </table>
-    {% endfor %}
+<h1 class="title">Works Log</h1>
+{% for job, user in data %}
+<h2>Action #{{ job.id }}</h2>
+<table class="table">
+    <tr class="table-secondary">
+        <th scope="col">Title of activity</th>
+        <th scope="col">Team Leader</th>
+        <th scope="col">Duration</th>
+        <th scope="col">List of collaborators</th>
+        <th scope="col">Is Finished</th>
+    </tr>
+    <tr>
+        <th class="table-info" style="text-align:center;">{{ job.job }}</th>
+        <th class="table-info">{{ user.name }} {{ user.surname }}</th>
+        <th class="table-info">{{ (job.end_date - job.start_date).seconds // 3600 }} hours</th>
+        <th class="table-info">{{ job.collaborators }}</th>
+        <th class="table-danger">{{ job.is_finished }}</th>
+    </tr>
+    <tr>
+        {% if current_user.is_authenticated and current_user == job.user %}
+            <th>
+                <a href="/jobs/{{ job.id }}" class="btn btn-warning">
+                    Изменить
+                </a>
+            </th>
+            <th>
+                <a href="/jobs_delete/{{ job.id }}" class="btn btn-danger">
+                    Удалить
+                </a>
+            </th>
+        {% endif %}
+    </tr>
+</table>
+
+{% endfor %}
+{% if current_user.is_authenticated %}
+<a href="jobs" class="btn btn-secondary">Добавить новость</a>
+{% endif %}
 {% endblock %}
